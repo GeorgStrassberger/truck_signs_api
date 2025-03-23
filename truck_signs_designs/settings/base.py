@@ -24,8 +24,8 @@ TEMPLATES_DIR = os.path.join(ROOT_BASE_DIR,'templates')
 
 
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1',]
-
+# ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1',]
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -134,8 +134,8 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = (os.path.join(ROOT_BASE_DIR, 'static'),)
 STATIC_ROOT = os.path.join(ROOT_BASE_DIR,'static/')
+#STATICFILES_DIRS = (os.path.join(ROOT_BASE_DIR, 'static'))
 
 # STATICFILES_FINDERS = (
 # 'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -147,7 +147,6 @@ MEDIA_ROOT = os.path.join(ROOT_BASE_DIR, 'media')
 
 # STRIPE_PUBLISHABLE_KEY=os.getenv("STRIPE_PUBLISHABLE_KEY")
 # STRIPE_SECRET_KEY=os.getenv("STRIPE_SECRET_KEY")
-
 
 
 

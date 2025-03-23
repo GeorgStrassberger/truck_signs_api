@@ -17,7 +17,6 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -31,8 +30,6 @@ DATABASES = {
 
 STRIPE_PUBLISHABLE_KEY=env("STRIPE_PUBLISHABLE_KEY")
 STRIPE_SECRET_KEY=env("STRIPE_SECRET_KEY")
-
-
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

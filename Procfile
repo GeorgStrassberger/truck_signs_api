@@ -1,1 +1,1 @@
-web: gunicorn truck_signs_designs.wsgi 
+web: gunicorn truck_signs_designs.wsgi
