@@ -46,7 +46,9 @@ cp ./truck_signs_designs/settings/simple_env_config.env ./truck_signs_designs/se
 
 ```bash
 docker run -it --rm python /bin/bash -c "pip -qq install Django; python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'"
+```
 
+```bash
 Output:
 j0z*mr@^sqnw1c+^(cj5-3u^j!^%p0o=b+6v+uv$r1%n4b&tw4
 ```
