@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+import environ
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -21,11 +22,16 @@ TEMPLATES_DIR = os.path.join(ROOT_BASE_DIR,'templates')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
+env = environ.Env()
+# reading env file
+environ.Env.read_env()
+
+SECRET_KEY= env("SECRET_KEY")
+DEBUG = True
 
 
-
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1',]
-
+# ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1',]
+ALLOWED_HOSTS = ['*',]
 
 # Application definition
 
@@ -44,6 +50,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
