@@ -1,3 +1,189 @@
+# 🚛 Truck Signs API
+
+An API for managing and providing truck sign data.
+
+---
+
+## 📋 Table of Contents
+
+- [Requirements](#requirements)
+- [Clone the Project](#clone-the-project)
+- [Prepare Configuration (.env)](#prepare-configuration-env)
+- [Create Docker Network](#create-docker-network)
+- [Start Postgres Database](#start-postgres-database)
+- [Start Django App](#start-django-app)
+- [Access Django Admin](#access-django-admin)
+- [Important Notes](#important-notes)
+- [Signs for Trucks](#-signs-for-trucks)
+
+---
+
+## 🧰 Requirements
+
+- [Git](https://git-scm.com/) must be installed
+- [Docker](https://www.docker.com/) must be installed
+
+---
+
+## 📦 Clone the Project
+
+```bash
+git clone https://github.com/GeorgStrassberger/truck_signs_api.git
+cd truck_signs_api
+```
+
+---
+
+⚙️ Prepare Configuration (.env)
+
+1. Copy the sample environment file:
+
+```bash
+cp ./truck_signs_designs/settings/simple_env_config.env ./truck_signs_designs/settings/.env
+```
+
+2. Generate a new SECRET_KEY:
+
+```bash
+docker run -it --rm python /bin/bash -c "pip -qq install Django; python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'"
+
+Output:
+j0z*mr@^sqnw1c+^(cj5-3u^j!^%p0o=b+6v+uv$r1%n4b&tw4
+```
+
+3. Open the .env file and fill in the variables:
+
+```bash
+nano ./truck_signs_designs/settings/.env
+```
+
+```bash
+SECRET_KEY=!your_secret_key!
+
+POSTGRES_DB=trucksigns_db
+POSTGRES_USER=trucksigns_user
+POSTGRES_PASSWORD=supertrucksignsuser!
+POSTGRES_HOST=truck_signs_db
+POSTGRES_PORT=5432
+
+# Django settings
+SUPERUSER_USERNAME=admin
+SUPERUSER_EMAIL=admin@admin.com
+SUPERUSER_PASSWORD=admin
+```
+
+---
+
+## 🌐 Create Docker Network
+
+```bash
+docker network create truck_signs_network
+```
+
+---
+
+## 🗃️ Start Postgres Database
+
+Bash:
+
+```bash
+docker run -d \
+--name truck_signs_db \
+--network truck_signs_network \
+--env-file ./truck_signs_designs/settings/.env \
+-v ./postgres_data:/var/lib/postgresql/data \
+-p 5432:5432 \
+--restart unless-stopped \
+postgres:13
+```
+
+Powershell:
+
+```pwsh
+docker run -d `
+--name truck_signs_db `
+--network truck_signs_network `
+--env-file ./truck_signs_designs/settings/.env `
+-v ./postgres_data:/var/lib/postgresql/data `
+-p 5432:5432 `
+--restart unless-stopped `
+postgres:13
+```
+
+---
+
+## 🚀 Start Django App
+
+First, build the Docker image:
+
+```bash
+docker build -t truck_signs .
+```
+
+Then, start the container:
+
+Bash:
+
+```bash
+docker run -d \
+--name truck_signs_app \
+--network truck_signs_network \
+--env-file ./truck_signs_designs/settings/.env \
+-v .:/app \
+-p 8020:5000 \
+--restart on-failure \
+truck_signs
+```
+
+Powershell:
+
+```bash
+docker run -d `
+--name truck_signs_app `
+--network truck_signs_network `
+--env-file ./truck_signs_designs/settings/.env `
+-v .:/app `
+-p 8020:5000 `
+--restart on-failure `
+truck_signs
+```
+
+---
+
+## 🔐 Access Django Admin
+
+Open in your browser:
+
+* http://localhost:8020 – should show an error page at first
+
+* http://localhost:8020/admin – Django Admin interface
+
+The superuser is defined in the .env file and should be automatically created on startup (otherwise, run createsuperuser
+manually).
+
+---
+
+## ⚠️ Important Notes
+
+* The database hostname must be consistent everywhere: `truck_signs_db`
+
+    * In `.env`, Docker run command, `entrypoint.sh`, etc.
+
+* The ports must match:
+
+    * `Dockerfile`: `EXPOSE 5000`
+
+    * `entrypoint.sh`: binds to `0.0.0.0:5000`
+
+    * Docker run: `-p 8020:5000`
+
+---
+
+You're all set 🎉 Your Truck Signs API is now running in Docker!
+
+
+---
+
 <div align="center">
 
 ![Truck Signs](./screenshots/Truck_Signs_logo.png)
