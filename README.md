@@ -122,6 +122,20 @@ First, build the Docker image:
 docker build -t truck_signs .
 ```
 
+
+If you got an Error like this: You need sudo priveleges. 
+>````aiignore
+>------
+> > [internal] load build context:
+>------
+>ERROR: failed to solve: error from sender: open postgres_data: permission denied
+>````
+>```bash
+>sudo docker build -t truck_signs .
+>```
+
+
+
 Then, start the container:
 
 Bash:
