@@ -14,7 +14,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
 
-
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost',env('HOST_IP_4', default='127.0.0.1')]
 
 DATABASES = {
     'default': {
