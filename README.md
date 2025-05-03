@@ -153,7 +153,8 @@ docker run -d \
 --name truck_signs_app \
 --network truck_signs_network \
 --env-file ./truck_signs_designs/settings/.env \
--v .:/app \
+-v truck_signs_media:/app/media \
+-v truck_signs_static:/app/static \
 -p 8020:5000 \
 --restart on-failure \
 truck_signs
@@ -161,12 +162,13 @@ truck_signs
 
 ***Powershell:***
 
-```bash
+```pwsh
 docker run -d `
 --name truck_signs_app `
 --network truck_signs_network `
 --env-file ./truck_signs_designs/settings/.env `
--v .:/app `
+-v truck_signs_media:/app/media `
+-v truck_signs_static:/app/static `
 -p 8020:5000 `
 --restart on-failure `
 truck_signs

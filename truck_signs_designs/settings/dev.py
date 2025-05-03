@@ -17,7 +17,6 @@ CORS_ALLOWED_ORIGINS = [
 
 ALLOWED_HOSTS = ['0.0.0.0', 'localhost',env('HOST_IP_4', default='127.0.0.1')]
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
