@@ -1,31 +1,40 @@
-# 🚛 Truck Signs API
 
-An API for managing and providing truck sign data.
+<div align="center">
+
+![Truck Signs](./screenshots/Truck_Signs_logo.png)
+
+# Signs for Trucks
+
+![Python version](https://img.shields.io/badge/Pythn-3.8.10-4c566a?logo=python&&longCache=true&logoColor=white&colorB=pink&style=flat-square&colorA=4c566a) ![Django version](https://img.shields.io/badge/Django-2.2.8-4c566a?logo=django&&longCache=truelogoColor=white&colorB=pink&style=flat-square&colorA=4c566a) ![Django-RestFramework](https://img.shields.io/badge/Django_Rest_Framework-3.12.4-red.svg?longCache=true&style=flat-square&logo=django&logoColor=white&colorA=4c566a&colorB=pink)
+
+</div>
+
+## Table of Contents
+- [Quickstart](#quickstart)
+  - [Prerequisites](#prerequisites)
+  - [Clone the Project](#1-clone-the-project)
+  - [Prepare Configuration](#2-prepare-configuration)
+  - [Create Docker Network](#3-network)
+  - [Database](#4-database)
+  - [Django App](#5-django-app)
+  - [Django Admin](#6-django-admin)
+  - [Important Notes](#important-notes)
+- [Description](#description)
+- [Installation](#installation)
+- [Screenshots of the Django Backend Admin Panel](#screenshots)
+- [Useful Links](#useful_links)
 
 ---
+## Quickstart
 
-## 📋 Table of Contents
-
-- [Requirements](#requirements)
-- [Clone the Project](#clone-the-project)
-- [Prepare Configuration](#prepare-configuration)
-- [Create Docker Network](#create-docker-network)
-- [Start Postgres Database](#start-postgres-database)
-- [Start Django App](#start-django-app)
-- [Access Django Admin](#access-django-admin)
-- [Important Notes](#important-notes)
-- [Signs for Trucks](#signs-for-trucks)
-
----
-
-## Requirements
+### Prerequisites
 
 - [Git](https://git-scm.com/) must be installed
 - [Docker](https://www.docker.com/) must be installed
 
 ---
 
-## Clone the Project
+### 1. Clone the Project
 
 ```bash
 git clone https://github.com/GeorgStrassberger/truck_signs_api.git
@@ -34,33 +43,33 @@ cd truck_signs_api
 
 ---
 
-## Prepare Configuration
+### 2. Prepare Configuration
 
-1. Copy the sample environment file:
+Copy the sample environment file:
 
 ```bash
 cp ./truck_signs_designs/settings/simple_env_config.env ./truck_signs_designs/settings/.env
 ```
 
-2. Generate a new SECRET_KEY:
+Generate a new SECRET_KEY:
 
 ```bash
 docker run -it --rm python /bin/bash -c "pip -qq install Django; python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'"
 ```
 
 ```bash
-Output:
+Example Output:
 j0z*mr@^sqnw1c+^(cj5-3u^j!^%p0o=b+6v+uv$r1%n4b&tw4
 ```
 
-3. Open the .env file and fill in the variables:
+Open the .env file and fill in the variables:
 
 ```bash
 nano ./truck_signs_designs/settings/.env
 ```
 
 ```bash
-SECRET_KEY=!your_secret_key!
+SECRET_KEY=j0z*mr@^sqnw1c+^(cj5-3u^j!^%p0o=b+6v+uv$r1%n4b&tw4
 
 POSTGRES_DB=trucksigns_db
 POSTGRES_USER=trucksigns_user
@@ -76,18 +85,20 @@ SUPERUSER_PASSWORD=admin
 
 ---
 
-## Create Docker Network
+### 3. Network
 
+Create Docker Network
 ```bash
 docker network create truck_signs_network
 ```
 
 ---
 
-## Start Postgres Database
+### 4. Database
 
-Bash:
+Start a Postgres Database with Docker
 
+***Bash:***
 ```bash
 docker run -d \
 --name truck_signs_db \
@@ -99,7 +110,7 @@ docker run -d \
 postgres:13
 ```
 
-Powershell:
+***Powershell:***
 
 ```pwsh
 docker run -d `
@@ -114,7 +125,7 @@ postgres:13
 
 ---
 
-## Start Django App
+### 5. Django App
 
 First, build the Docker image:
 
@@ -122,43 +133,42 @@ First, build the Docker image:
 docker build -t truck_signs .
 ```
 
-
 If you got an Error like this: You need sudo priveleges. 
->````aiignore
+>```ignore
 >------
 > > [internal] load build context:
 >------
 >ERROR: failed to solve: error from sender: open postgres_data: permission denied
->````
+>```
 >```bash
 >sudo docker build -t truck_signs .
 >```
 
-
-
 Then, start the container:
 
-Bash:
+***Bash:***
 
 ```bash
 docker run -d \
 --name truck_signs_app \
 --network truck_signs_network \
 --env-file ./truck_signs_designs/settings/.env \
--v .:/app \
+-v truck_signs_media:/app/media \
+-v truck_signs_static:/app/static \
 -p 8020:5000 \
 --restart on-failure \
 truck_signs
 ```
 
-Powershell:
+***Powershell:***
 
-```bash
+```pwsh
 docker run -d `
 --name truck_signs_app `
 --network truck_signs_network `
 --env-file ./truck_signs_designs/settings/.env `
--v .:/app `
+-v truck_signs_media:/app/media `
+-v truck_signs_static:/app/static `
 -p 8020:5000 `
 --restart on-failure `
 truck_signs
@@ -166,7 +176,7 @@ truck_signs
 
 ---
 
-## Access Django Admin
+### 6. Django Admin
 
 Open in your browser:
 
@@ -179,43 +189,23 @@ manually).
 
 ---
 
-## Important Notes
+### Important Notes
 
-- The database hostname must be consistent everywhere: `truck_signs_db`
+>- The database hostname must be consistent everywhere: `truck_signs_db`
+>
+>  - In `.env`, Docker run command, `entrypoint.sh`, etc.
+>
+>- The ports must match:
+>
+>  - `Dockerfile`: `EXPOSE 5000`
+>
+>  - `entrypoint.sh`: binds to `0.0.0.0:5000`
+>
+>  - Docker run: `-p 8020:5000`
 
-  - In `.env`, Docker run command, `entrypoint.sh`, etc.
-
-- The ports must match:
-
-  - `Dockerfile`: `EXPOSE 5000`
-
-  - `entrypoint.sh`: binds to `0.0.0.0:5000`
-
-  - Docker run: `-p 8020:5000`
-
----
-
-You're all set 🎉 Your Truck Signs API is now running in Docker!
+Your Truck Signs API is now running in Docker!
 
 ---
-
-<div align="center">
-
-![Truck Signs](./screenshots/Truck_Signs_logo.png)
-
-# Signs for Trucks
-
-![Python version](https://img.shields.io/badge/Pythn-3.8.10-4c566a?logo=python&&longCache=true&logoColor=white&colorB=pink&style=flat-square&colorA=4c566a) ![Django version](https://img.shields.io/badge/Django-2.2.8-4c566a?logo=django&&longCache=truelogoColor=white&colorB=pink&style=flat-square&colorA=4c566a) ![Django-RestFramework](https://img.shields.io/badge/Django_Rest_Framework-3.12.4-red.svg?longCache=true&style=flat-square&logo=django&logoColor=white&colorA=4c566a&colorB=pink)
-
-</div>
-
-## Table of Contents
-
-- [Description](#description)
-- [Installation](#installation)
-- [Screenshots of the Django Backend Admin Panel](#screenshots)
-- [Useful Links](#useful_links)
-
 ## Description
 
 **Signs for Trucks** is an online store to buy pre-designed vinyls with custom lines of letters (often call truck letterings). The store also allows clients to upload their own designs and to customize them on the website as well. Aside from the vinyls that are the main product of the store, clients can also purchase simple lettering vinyls with no truck logo, a fire extinguisher vinyl, and/or a vinyl with only the truck unit number (or another number selected by the client).
@@ -358,3 +348,4 @@ The behavior of some of the views had to be modified to address functionalities 
 - Create Virual Environment with Virtualenv and Virtualenvwrapper: [Link](https://docs.python-guide.org/dev/virtualenvs/)
 - [Configure CORS](https://www.stackhawk.com/blog/django-cors-guide/)
 - [Setup Django with Cloudinary](https://cloudinary.com/documentation/django_integration)
+
